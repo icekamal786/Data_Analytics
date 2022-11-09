@@ -6,11 +6,11 @@ from sklearn.datasets import make_blobs
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.model_selection import train_test_split
 
-# ftest= pd.read_csv('https://raw.githubusercontent.com/icekamal786/Data_Analytics/main/test.csv')
-# ftrain= pd.read_csv('https://raw.githubusercontent.com/icekamal786/Data_Analytics/main/train.csv')
+ftest= pd.read_csv('https://raw.githubusercontent.com/icekamal786/Data_Analytics/main/test.csv')
+ftrain= pd.read_csv('https://raw.githubusercontent.com/icekamal786/Data_Analytics/main/train.csv')
 
-ftest= pd.read_csv('C:\\Users\\admin\\Desktop\\GIT\\OPEN IIT\\Data_Analytics\\test.csv')
-ftrain= pd.read_csv('C:\\Users\\admin\\Desktop\\GIT\\OPEN IIT\\Data_Analytics\\train.csv')
+# ftest= pd.read_csv('C:\\Users\\admin\\Desktop\\GIT\\OPEN IIT\\Data_Analytics\\test.csv')
+# ftrain= pd.read_csv('C:\\Users\\admin\\Desktop\\GIT\\OPEN IIT\\Data_Analytics\\train.csv')
 
 # print(ftest)
 # print(ftrain)
@@ -30,6 +30,20 @@ y_pred_5 = knn5.predict(X_test)
 # y_pred_7 = knn7.predict(xtrain)
 # print(y_pred_5)
 # print(y_pred_7)
+from sklearn.metrics import classification_report, confusion_matrix
+cm = confusion_matrix(y_test, y_pred_5)
+
+fig, ax = plt.subplots(figsize=(8, 8))
+ax.imshow(cm)
+ax.grid(False)
+ax.xaxis.set(ticks=(0, 1), ticklabels=('Predicted 0s', 'Predicted 1s'))
+ax.yaxis.set(ticks=(0, 1), ticklabels=('Actual 0s', 'Actual 1s'))
+ax.set_ylim(1.5, -0.5)
+for i in range(2):
+    for j in range(2):
+        ax.text(j, i, cm[i, j], ha='center', va='center', color='red')
+plt.show()
+
 
 from sklearn.metrics import accuracy_score
 print("Accuracy with k=5", accuracy_score(y_test, y_pred_5)*100)
