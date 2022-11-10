@@ -1,46 +1,25 @@
+import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-from sklearn import svm, datasets
-import pandas as pd
-
-# ftest= pd.read_csv('https://raw.githubusercontent.com/icekamal786/Data_Analytics/main/test.csv')
-# ftrain= pd.read_csv('https://raw.githubusercontent.com/icekamal786/Data_Analytics/main/train.csv')
+from sklearn.model_selection import train_test_split
 
 ftest= pd.read_csv('C:\\Users\\admin\\Desktop\\GIT\\OPEN IIT\\Data_Analytics\\test.csv')
 ftrain= pd.read_csv('C:\\Users\\admin\\Desktop\\GIT\\OPEN IIT\\Data_Analytics\\train.csv')
 
-X= ftrain.iloc[:, [0,1]].values  
+print(ftest)
+print(ftrain)
+x= ftrain.iloc[:, [0,1]].values  
+xtest= ftest.iloc[:, [0,1]].values  
 y= ftrain.iloc[:, 2].values 
-xtest= ftest.iloc[:, [0,1]].values 
 
-# import some data to play with
-# iris = datasets.load_iris()
-# X = iris.data[:, :2] # we only take the first two features. We could
- # avoid this ugly slicing by using a two-dim dataset
-# y = iris.target
+X_train, X_test, y_train, y_test = train_test_split(x, y, test_size= 0.3, random_state = 0)
 
-# we create an instance of SVM and fit out data. We do not scale our
-# data since we want to plot the support vectors
-C = 1.0 # SVM regularization parameter
-svc = svm.SVC(kernel='linear', C=1,gamma=1).fit(X, y)
+from sklearn.svm import SVC
+svclassifier = SVC(kernel='linear')
+svclassifier.fit(X_train, y_train)
 
-# create a mesh to plot in
-x_min, x_max = X[:, 0].min() - 1, X[:, 0].max() + 1
-y_min, y_max = X[:, 1].min() - 1, X[:, 1].max() + 1
-h = (x_max / x_min)/100
-xx, yy = np.meshgrid(np.arange(x_min, x_max, h),
- np.arange(y_min, y_max, h))
+y_pred = svclassifier.predict(X_test)
 
-plt.subplot(1, 1, 1)
-Z = svc.predict(np.c_[xx.ravel(), yy.ravel()])
-Z = Z.reshape(xx.shape)
-plt.contourf(xx, yy, Z, cmap=plt.cm.Paired, alpha=0.8)
-
-plt.scatter(X[:, 0], X[:, 1], c=y, cmap=plt.cm.Paired)
-plt.xlabel('Sepal length')
-plt.ylabel('Sepal width')
-plt.xlim(xx.min(), xx.max())
-plt.title('SVC with linear kernel')
-plt.show()
-
-# svc = svm.SVC(kernel='rbf', C=1,gamma=0).fit(X, y)
+from sklearn.metrics import classification_report, confusion_matrix
+print(confusion_matrix(y_test,y_pred))
+print(classification_report(y_test,y_pred))
